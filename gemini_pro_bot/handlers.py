@@ -23,7 +23,7 @@ async def start(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /start is issued."""
     user = update.effective_user
     await update.message.reply_html(
-        f"Hi {user.mention_html()}!\n\nStart sending messages with me to generate a response.\n\nSend /new to start a new chat session.",
+        f"Привет {user.mention_html()}!\n\nНачните отправлять мне сообщения, чтобы получить ответ.\n\nОтправь /new для создания новой чат сессии.\nОтправь /help для получения помощи",
         # reply_markup=ForceReply(selective=True),
     )
 
@@ -31,14 +31,14 @@ async def start(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
 async def help_command(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /help is issued."""
     help_text = """
-Basic commands:
-/start - Start the bot
-/help - Get help. Shows this message
+Стандартные команды:
+/start - Запустить бота
+/help - Показать сообщение помощи
 
-Chat commands:
-/new - Start a new chat session (model will forget previously generated messages)
+Чат команды:
+/new - Запуск новой сессии (модель забудет ранее сгенерированные сообщения)
 
-Send a message to the bot to generate a response.
+Отправьте сообщение боту для генерации ответа.
 """
     await update.message.reply_text(help_text)
 
@@ -46,11 +46,11 @@ Send a message to the bot to generate a response.
 async def newchat_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Start a new chat session."""
     init_msg = await update.message.reply_text(
-        text="Starting new chat session...",
+        text="Запуск новой чат сессии...",
         reply_to_message_id=update.message.message_id,
     )
     new_chat(context)
-    await init_msg.edit_text("New chat session started.")
+    await init_msg.edit_text("Новая чат-сессия запущена.")
 
 
 # Define the function that will handle incoming messages
@@ -65,7 +65,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         new_chat(context)
     text = update.message.text
     init_msg = await update.message.reply_text(
-        text="Generating...", reply_to_message_id=update.message.message_id
+        text="Генерирую...", reply_to_message_id=update.message.message_id
     )
     await update.message.chat.send_action(ChatAction.TYPING)
     # Generate a response using the text-generation pipeline
@@ -136,7 +136,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 async def handle_image(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle incoming images with captions and generate a response."""
     init_msg = await update.message.reply_text(
-        text="Generating...", reply_to_message_id=update.message.message_id
+        text="Генерирую...", reply_to_message_id=update.message.message_id
     )
     images = update.message.photo
     unique_images: dict = {}
